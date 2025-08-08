@@ -1,6 +1,9 @@
 {
   "tslint.configFile": "tslint.json",
   "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": true
-  }
+    "source.fixAll.tslint": "explicit"
+  },
+  "i18n-ally.localesPaths": [
+    "src/static/i18n"
+  ]
 }
