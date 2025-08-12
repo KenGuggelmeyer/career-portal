@@ -6,8 +6,7 @@
     placeholder="Keyword Search"
     alwaysOpen="true"
     [(ngModel)]="keyword"
-    (ngModelChange)="searchOnDelay()"
-  ></novo-search>
+    (ngModelChange)="searchOnDelay()"></novo-search>
 </div>
 <novo-loading *ngIf="loading"></novo-loading>
 <ng-container *ngIf="!loading">
@@ -17,38 +16,27 @@
       title="{{ 'CATEGORY' | translate }}"
       [filter]="filter"
       (checkboxFilter)="updateFilter('publishedCategory', $event)"
-      data-automation-id="category"
-    ></app-sidebar-filter>
+      data-automation-id="category"></app-sidebar-filter>
     <app-sidebar-filter
-      field="address(state)"
-      title="{{ 'STATE' | translate }}"
+      field="customText1"
+      title="Regio"
       [filter]="filter"
-      (checkboxFilter)="updateFilter('address(state)', $event)"
-      data-automation-id="state"
-    ></app-sidebar-filter>
-    <app-sidebar-filter
-      field="address(city)"
-      title="{{ 'CITY' | translate }}"
-      [filter]="filter"
-      (checkboxFilter)="updateFilter('address(city)', $event)"
-      data-automation-id="city"
-    ></app-sidebar-filter>
+      (checkboxFilter)="updateFilter('customText1', $event)"
+      data-automation-id="customText1"></app-sidebar-filter>
   </div>
 </ng-container>
 <ng-container *ngIf="languageDropdownEnabled">
   <novo-dropdown
     side="left"
     class="preferredLanguageDropdown"
-    side="above-below"
-  >
+    side="above-below">
     <button type="button" theme="dialogue" icon="collapse" inverse>
       {{ "PREFERRED_LANGUAGE" | translate }}
     </button>
     <list>
       <item
         *ngFor="let language of availableLocales"
-        (click)="setPreferredLanguage(language.localeCode)"
-      >
+        (click)="setPreferredLanguage(language.localeCode)">
         {{ language.name }}
       </item>
     </list>
@@ -57,9 +45,7 @@
 <a
   *ngIf="showPrivacyPolicy"
   (click)="viewPrivacyPolicy()"
-  class="privacy-policy-link"
-  >{{ "PRIVACY_POLICY" | translate }}</a
->
+  class="privacy-policy-link">{{ "PRIVACY_POLICY" | translate }}</a>
 
 <section class="credits">
   <span class="powered-by">Powered By</span>

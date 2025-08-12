@@ -1,4 +1,3 @@
-
 <ng-container *ngFor="let chip of jobInfoChips"
     [ngSwitch]="chip.type || 'string'">
     <span class="chip" *ngIf="job[chip] || job[chip?.field]"

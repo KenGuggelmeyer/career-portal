@@ -7,12 +7,12 @@ import { IServiceSettings } from '../../typings/settings';
 @Injectable()
 export class SearchService {
 
-  public constructor(private http: HttpClient, public settings: SettingsService) {  }
+  public constructor(private http: HttpClient, public settings: SettingsService) { }
 
   get baseUrl(): string {
     let service: IServiceSettings = SettingsService.settings?.service;
     let port: number = service?.port ? service.port : 443;
-    let scheme: string = `http${ port === 443  ? 's' : '' }`;
+    let scheme: string = `http${port === 443 ? 's' : ''}`;
 
     return `${scheme}://public-rest${service?.swimlane}.bullhornstaffing.com:${port}/rest-services/${service?.corpToken}`;
   }
@@ -58,54 +58,80 @@ export class SearchService {
     let params: any = {};
     let queryArray: string[] = [];
     if (ids.length > 0) {
-    params.where = `id IN (${ids.toString()})`;
-    params.count = `500`;
-    params.fields = `${field},count(id)`;
-    params.groupBy = field;
-    switch (field) {
-      case 'publishedCategory(id,name)':
-        params.orderBy = 'publishedCategory.name';
-        break;
-      case 'address(state)':
-        params.orderBy = 'address.state';
-        break;
-      case 'address(city)':
-        params.orderBy = 'address.city';
-        break;
-      default:
-        params.orderBy = '-count.id';
-        break;
-    }
-    for (let key in params) {
-      queryArray.push(`${key}=${params[key]}`);
-    }
-    let queryString: string = queryArray.join('&');
+      params.where = `id IN (${ids.toString()})`;
+      params.count = `500`;
+      params.fields = `${field},count(id)`;
+      params.groupBy = field;
+      switch (field) {
+        case 'publishedCategory(id,name)':
+          params.orderBy = 'publishedCategory.name';
+          break;
+        case 'address(state)':
+          params.orderBy = 'address.state';
+          break;
+        case 'address(city)':
+          params.orderBy = 'address.city';
+          break;
+        case 'customText1':
+          params.orderBy = 'customText1';
+          break;
+        default:
+          params.orderBy = '-count.id';
+          break;
+      }
+      for (let key in params) {
+        queryArray.push(`${key}=${params[key]}`);
+      }
+      let queryString: string = queryArray.join('&');
 
       return this.http.get(`${this.baseUrl}/query/JobBoardPost?${queryString}`); // tslint:disable-line
     } else {
-      return of({count: 0, start: 0, data: []});
+      return of({ count: 0, start: 0, data: [] });
     }
   }
 
   private formatAdditionalCriteria(isSearch: boolean): string {
-    let field: string =  SettingsService.settings.additionalJobCriteria.field;
+    let field: string = SettingsService.settings.additionalJobCriteria.field;
     let values: string[] = SettingsService.settings.additionalJobCriteria.values;
     let query: string = '';
     let delimiter: '"' | '\'' = isSearch ? '"' : '\'';
     let equals: ':' | '=' = isSearch ? ':' : '=';
 
     if (field && values.length > 0 && field !== '[ FILTER FIELD HERE ]' && values[0] !== '[ FILTER VALUE HERE ]') {
-        for (let i: number = 0; i < values.length; i++) {
-            if (i > 0) {
-                query += ` OR `;
-            } else {
-                query += ' AND (';
-            }
-            query += `${field}${equals}${delimiter}${values[i]}${delimiter}`;
+      for (let i: number = 0; i < values.length; i++) {
+        if (i > 0) {
+          query += ` OR `;
+        } else {
+          query += ' AND (';
         }
-        query += ')';
+        query += `${field}${equals}${delimiter}${values[i]}${delimiter}`;
+      }
+      query += ')';
     }
     return query;
+  }
+
+  public getFieldMetadata(entityName: string, fieldName: string): Observable<any> {
+    console.log(this.baseUrl);
+    return this.http.get(`${this.baseUrl}/meta/${entityName}?fields=${fieldName}`);
+  }
+
+  public getCustomFieldOptions(fieldName: string): Observable<any> {
+    let queryArray: string[] = [];
+    let params: any = {};
+
+    params.query = `(isOpen:1) AND (isDeleted:0)${this.formatAdditionalCriteria(true)}`;
+    params.fields = `${fieldName},count(id)`;
+    params.groupBy = fieldName;
+    params.orderBy = `-count.id`;
+    params.count = `500`;
+
+    for (let key in params) {
+      queryArray.push(`${key}=${params[key]}`);
+    }
+    let queryString: string = queryArray.join('&');
+
+    return this.http.get(`${this.baseUrl}/query/JobBoardPost?${queryString}`);
   }
 
   private formatFilter(filter: object, isSearch: boolean, ignoreFields: string[] = []): string {

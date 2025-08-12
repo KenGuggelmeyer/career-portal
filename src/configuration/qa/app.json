@@ -15,17 +15,17 @@
   "careersUrl": "",
   "defaultLocale": "en-US",
   "supportedLocales": [
-      "en-US",
-      "en-GB",
-      "en",
-      "fr-FR",
-      "fr",
-      "es",
-      "de",
-      "it",
-      "nl",
-      "ru",
-      "zh-CN"
+    "en-US",
+    "en-GB",
+    "en",
+    "fr-FR",
+    "fr",
+    "es",
+    "de",
+    "it",
+    "nl",
+    "ru",
+    "zh-CN"
   ],
   "minUploadSize": 4096,
   "maxRelatedJobs": 5,
@@ -48,17 +48,18 @@
       "isDeleted",
       "publishedZip",
       "salary",
-      "salaryUnit"
+      "salaryUnit",
+      "customText1"
     ],
     "jobInfoChips": [
+      {
+        "type": "string",
+        "field": "customText1"
+      },
       "employmentType",
       {
         "type": "mediumDate",
         "field": "dateLastPublished"
-      },
-      {
-        "type": "USD",
-        "field": "salary"
       }
     ],
     "showCategory": true,

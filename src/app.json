@@ -69,9 +69,9 @@
   "maxUploadSize": 5242880,
   "service": {
     "batchSize": 500,
-    "corpToken": "1VCNF4",
+    "corpToken": "D1Z9J4",
     "port": null,
-    "swimlane": "91",
+    "swimlane": "70",
     "fields": [
       "id",
       "title",
@@ -85,9 +85,14 @@
       "isDeleted",
       "publishedZip",
       "salary",
-      "salaryUnit"
+      "salaryUnit",
+      "customText1"
     ],
     "jobInfoChips": [
+      {
+        "type": "string",
+        "field": "customText1"
+      },
       "employmentType",
       {
         "type": "mediumDate",
@@ -95,11 +100,16 @@
       }
     ],
     "showCategory": true,
-    "keywordSearchFields": ["publicDescription", "title"]
+    "keywordSearchFields": [
+      "publicDescription",
+      "title"
+    ]
   },
   "additionalJobCriteria": {
     "field": "[ FILTER FIELD HERE ]",
-    "values": ["[ FILTER VALUE HERE ]"],
+    "values": [
+      "[ FILTER VALUE HERE ]"
+    ],
     "sort": "-dateLastPublished"
   },
   "integrations": {

@@ -10,8 +10,9 @@ import { SettingsService } from 'src/app/services/settings/settings.service';
 })
 export class InfoChipsComponent {
   @Input() public job: JobBoardPost;
-  public jobInfoChips: [string|any]  = SettingsService.settings.service.jobInfoChips;
+  public jobInfoChips: [string | any] = SettingsService.settings.service.jobInfoChips;
 
-  constructor() {}
+  constructor() {
+  }
 
 }
