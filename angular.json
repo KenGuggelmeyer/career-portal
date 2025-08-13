@@ -33,6 +33,16 @@
                 "glob": "**/*",
                 "input": "src/static/i18n/",
                 "output": "/i18n/"
+              },
+              {
+                "input": ".",
+                "output": "/",
+                "glob": "wp-oscp.php"
+              },
+              {
+                "input": ".",
+                "output": "/",
+                "glob": "wp-oscp.php"
               }
             ],
             "styles": [
@@ -84,6 +94,11 @@
                   "glob": "**/*",
                   "input": "src/static/i18n/",
                   "output": "/i18n/"
+                },
+                {
+                  "input": ".",
+                  "output": "/",
+                  "glob": "wp-oscp.php"
                 }
               ],
               "fileReplacements": [
@@ -125,6 +140,11 @@
                   "glob": "**/*",
                   "input": "src/static/i18n/",
                   "output": "/i18n/"
+                },
+                {
+                  "input": ".",
+                  "output": "/",
+                  "glob": "wp-oscp.php"
                 }
               ],
               "fileReplacements": [
@@ -166,6 +186,11 @@
                   "glob": "**/*",
                   "input": "src/static/i18n/",
                   "output": "/i18n/"
+                },
+                {
+                  "input": ".",
+                  "output": "/",
+                  "glob": "wp-oscp.php"
                 }
               ],
               "fileReplacements": [

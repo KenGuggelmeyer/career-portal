@@ -5,6 +5,7 @@
 .mid-between { justify-content: space-between; }
 .mid-around { justify-content: space-around; }
 .mid-evenly { justify-content: space-evenly; }
+.row { display: flex; flex-direction: row; }
 /* apply result */
 .app-reset { padding:  0px;  margin:  0px;  box-sizing: content-box;  }
 .mid { display: flex; align-items: center;  }
