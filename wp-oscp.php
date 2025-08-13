@@ -1869,4 +1869,95 @@ function oscp_save_file($onload)
     file_put_contents(OSCP_APP_JSON_PATH, $newJsonString);
 }
 
+function oscp_import_app_json_to_options()
+{
+    if (!file_exists(OSCP_APP_JSON_PATH)) return;
+
+    $raw  = file_get_contents(OSCP_APP_JSON_PATH);
+    $data = json_decode($raw, true);
+    if (!is_array($data)) return;
+
+    // Helper
+    $g = function ($arr, $path, $default = null) {
+        foreach (explode('.', $path) as $k) {
+            if (!is_array($arr) || !array_key_exists($k, $arr)) return $default;
+            $arr = $arr[$k];
+        }
+        return $arr;
+    };
+
+    $mapped = [];
+
+    // Simple maps
+    $mapped['oscp_company_name']          = (string) ($data['companyName'] ?? '');
+    $mapped['oscp_locale']                = (string) ($data['defaultLocale'] ?? 'en-US');
+    $mapped['oscp_corp_token']            = (string) $g($data, 'service.corpToken', '');
+    $mapped['oscp_swim_lane']             = (string) $g($data, 'service.swimlane', '');
+    $mapped['oscp_filter_field']          = (string) $g($data, 'additionalJobCriteria.field', '');
+    $mapped['oscp_filter_values']         = implode(',', (array) $g($data, 'additionalJobCriteria.values', []));
+    $mapped['oscp_sort']                  = (string) $g($data, 'additionalJobCriteria.sort', '-dateLastPublished');
+    $mapped['oscp_analytics_tracking_id'] = (string) $g($data, 'integrations.googleAnalytics.trackingId', '');
+    $mapped['oscp_privacy_url']           = (string) $g($data, 'privacyConsent.privacyPolicyUrl', '');
+
+    // Accepted resume types → JSON string (what your option expects)
+    $resumeTypes = $data['acceptedResumeTypes'] ?? ['html', 'text', 'txt', 'pdf', 'doc', 'docx', 'rtf', 'odt'];
+    if (!is_array($resumeTypes)) $resumeTypes = [];
+    $mapped['oscp_resume_types'] = json_encode(array_values(array_unique(array_map('strval', $resumeTypes))));
+
+    // Fields list
+    $fields = $g($data, 'service.fields', []);
+    if (!is_array($fields)) $fields = [];
+    $mapped['oscp_fields'] = implode(',', array_map('strval', $fields));
+
+    // jobInfoChips → keep only string names (fallback to employmentType)
+    $chips = $g($data, 'service.jobInfoChips', []);
+    if (!is_array($chips)) $chips = [];
+    $chipNames = [];
+    foreach ($chips as $chip) {
+        if (is_string($chip)) $chipNames[] = $chip;
+        // if array with 'field', you could also push $chip['field']
+    }
+    if (!$chipNames) $chipNames = ['employmentType'];
+    $mapped['oscp_job_info_chips'] = implode(',', $chipNames);
+
+    // Booleans → 'true'/'false'
+    $tf = fn($v) => $v ? 'true' : 'false';
+    $mapped['oscp_gender_race_ethnicity'] = $tf((bool) $g($data, 'eeoc.genderRaceEthnicity', false));
+    $mapped['oscp_veteran']               = $tf((bool) $g($data, 'eeoc.veteran', false));
+    $mapped['oscp_disability']            = $tf((bool) $g($data, 'eeoc.disability', false));
+    $mapped['oscp_consent']               = $tf((bool) $g($data, 'privacyConsent.consentCheckbox', false));
+    $mapped['oscp_sidebar_link']          = $tf((bool) $g($data, 'privacyConsent.sidebarLink', false));
+
+    // Never import these (tenant-specific)
+    $neverImport = ['oscp_corp_token', 'oscp_swim_lane', 'oscp_company_name'];
+    foreach ($neverImport as $k) unset($mapped[$k]);
+
+    // Bring forward existing values for UI-only fields
+    $existing = get_option('oscp_config_data', []);
+    $mapped['oscp_width']      = $existing['oscp_width']      ?? '100%';
+    $mapped['oscp_height']     = $existing['oscp_height']     ?? '500px';
+    $mapped['oscp_scrollable'] = $existing['oscp_scrollable'] ?? 'yes';
+
+    // Merge: fill only missing/empty existing values
+    foreach ($mapped as $k => $v) {
+        $hasExisting = array_key_exists($k, $existing) && $existing[$k] !== '' && $existing[$k] !== null;
+        if ($hasExisting) continue;
+        $existing[$k] = $v;
+    }
+
+    update_option('oscp_config_data', $existing);
+}
+
+
+// 1) Import on activation (first install/enable)
+register_activation_hook(__FILE__, 'oscp_import_app_json_to_options');
+
+// 2) Also import if options are missing (e.g., after DB reset)
+add_action('admin_init', function () {
+    $opts = get_option('oscp_config_data');
+    if (empty($opts) || !is_array($opts)) {
+        oscp_import_app_json_to_options();
+    }
+});
+
 add_shortcode('oscp', 'oscp_plugin_add_shortcode');
