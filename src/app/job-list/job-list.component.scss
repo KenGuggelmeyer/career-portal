@@ -1,10 +1,11 @@
 :host {
 
   div.open-positions {
-      font-weight: 600;
-      font-size: 1.5em;
-      margin: 30px 34px 22px 35px
+    font-weight: 600;
+    font-size: 1.5em;
+    margin: 30px 34px 22px 35px
   }
+
   div.mobile-filter-container {
     margin: 30px 34px 22px 35px
   }
@@ -13,11 +14,23 @@
 novo-list {
   overflow: auto;
   min-height: 61.3vh;
+
   .job-card {
     margin: 12px 35px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, .1);
     padding-bottom: 10px;
     cursor: pointer;
+
+    .chips-desktop {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .chips-mobile {
+      display: none;
+    }
+
     .description {
       display: inline-block;
       word-wrap: break-word;
@@ -27,35 +40,44 @@ novo-list {
       padding: 0px 15px 15px 15px;
       width: 100%;
     }
+
     .category {
       padding: 0px 15px 10px 15px;
       font-weight: 600;
       display: inline-block;
       word-wrap: break-word;
       overflow: hidden;
-        @media only screen and (max-width: 768px) {
-          display: none;
-        }
-        @media only screen and (min-width: 768px) {
-        }
+
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
+
+      @media only screen and (min-width: 768px) {}
     }
-    novo-list-item  {
+
+    novo-list-item {
       item-content {
-        span, b {
+
+        span,
+        b {
           color: rgba(67, 67, 67, 0.65);
         }
+
         .bhi-next {
           color: #3399DD;
         }
       }
+
       item-header {
         item-title {
-            color: #4a89dc;
+          color: #4a89dc;
         }
       }
+
       item-header-end {
         flex-wrap: wrap;
         display: block;
+
         .mid-card {
           color: #0B344F;
           padding: 10px 10px;
@@ -63,6 +85,7 @@ novo-list {
           background-color: #f4f4f4;
           border-radius: 8px;
           align-self: center;
+
           i {
             font-size: 1em;
           }
@@ -72,33 +95,46 @@ novo-list {
   }
 
 }
+
 @media only screen and (min-width: 768px) {
-  :host{
+  :host {
     .mobile-filter-container {
       display: none;
     }
   }
 }
+
 @media only screen and (max-width: 768px) {
-  :host{
+  :host {
     div.open-positions {
       font-weight: 600;
       font-size: 1.5em;
       margin: 30px 34px 22px 15px
     }
+
     div.mobile-filter-container {
       margin: 30px 34px 22px 15px
     }
-    div.job-card{
+
+    div.job-card {
       margin: 12px 15px;
+
       novo-list-item {
         flex-direction: inherit;
+
         item-header-end {
-          display: flex;
-          .mid-card {
-            margin-top: 5px;
-          }
+          /* desktop chips hidden on mobile */
+          display: none;
         }
+      }
+
+      .chips-mobile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 0 15px 4px 15px;
+        margin-top: 4px;
+        margin-bottom: 12px;
       }
     }
 
@@ -112,6 +148,7 @@ novo-list {
   justify-content: center;
   color: #999999;
   font-size: 1.7em;
+
   i {
     margin-right: 15px;
   }
