@@ -207,6 +207,14 @@ app-apply-modal {
   flex-direction: column;
 }
 
+/* WordPress admin bar compensation (if embedded, parent might inject #wpadminbar shifting visual top) */
+body.admin-bar .cdk-overlay-pane app-apply-modal {
+  padding-top: 32px;
+}
+
+/* Defensive: if host theme sets position context that breaks centering */
+iframe body .cdk-overlay-container, .cdk-overlay-container { position: fixed; top:0; left:0; width:100%; height:100%; }
+
 @media (max-width: 768px),
 (max-height: 700px) {
   .cdk-overlay-pane app-apply-modal {

@@ -75,6 +75,10 @@ export class JobDetailsComponent implements OnInit {
 
   public apply(): void {
     this.analytics.trackEvent(`Open Apply Form ${this.job.id}`);
+    // Ensure viewport is at top so modal positioning isn't visually offset inside WP iframe/theme wrappers
+    if (!SettingsService.isServer) {
+      try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch (e) { /* noop */ }
+    }
     this.modalService.open(ApplyModalComponent, {
       job: this.job,
       source: this.source,
