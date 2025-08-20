@@ -3,11 +3,11 @@
 
 app-job-list {
   novo-loading {
-  position: absolute;
-  top: 50%;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+    position: absolute;
+    top: 50%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -21,13 +21,14 @@ novo-file-input {
 }
 
 app-job-list {
-  novo-list>div>novo-list-item   {
+  novo-list>div>novo-list-item {
     border-bottom: unset;
 
     div.list-item {
-      item-content i{
-       color: #4a89dc;
+      item-content i {
+        color: #4a89dc;
       }
+
       >item-header item-title {
         >h6 {
           color: #4a89dc;
@@ -36,12 +37,15 @@ app-job-list {
     }
   }
 }
+
 novo-search {
   padding: 17px;
-  > input[data-automation-id="novo-search-input"] {
+
+  >input[data-automation-id="novo-search-input"] {
     padding: 8px 10px;
     font-size: 1em;
   }
+
   button[theme="fab"][icon="bhi-search"] {
     width: 40px;
     height: 33px;
@@ -56,12 +60,13 @@ novo-search {
       }
     }
   }
+
   &.active {
     max-width: 700px;
   }
 }
 
-app-job-details novo-card header{
+app-job-details novo-card header {
   padding: 10px 20px 10px 20px !important;
   background-color: #BB5566;
   margin: 0;
@@ -74,15 +79,17 @@ app-job-details novo-card header{
   text-overflow: ellipsis;
   padding-right: 20px;
   color: white;
+
   i {
     font-size: 1em;
   }
+
   h3 {
     font-weight: 500 !important;
   }
 }
 
-.header{
+.header {
   >header {
     h1 {
       color: #D9DADC;
@@ -104,18 +111,22 @@ app-sidebar {
     flex-wrap: nowrap;
     overflow-y: auto;
     overflow-x: hidden;
+
     &::-webkit-scrollbar {
-      background-color:#fff;
-      height:4px;
+      background-color: #fff;
+      height: 4px;
       width: 4px;
     }
+
     &::-webkit-scrollbar-track {
-      background-color:#fff
+      background-color: #fff
     }
+
     &::-webkit-scrollbar-thumb {
-      background-color:#babac0;
-      border-radius:4px;
+      background-color: #babac0;
+      border-radius: 4px;
     }
+
     label {
       color: #2F384F !important;
       font-weight: 600;
@@ -125,36 +136,42 @@ app-sidebar {
 
 app-main-page {
   >novo-loading {
-  position: absolute;
-  top: 50%;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+    position: absolute;
+    top: 50%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 }
 
 app-apply-modal {
   novo-form {
     form {
-      div.consent-form{
+      div.consent-form {
         display: flex;
+
         novo-control.checkbox {
           width: 50px;
+
           div.field-message.checkbox.error-hidden {
             display: none;
           }
+
           div.field-message.checkbox.error-shown {
             display: none;
           }
         }
+
         label.consent-checkbox-label {
           float: right;
           padding: 2em 0 0 0;
+
           span {
             color: #276ecc;
           }
         }
       }
+
       div.eeoc-form {
         novo-fieldset-header {
           margin-left: -3em;
@@ -163,8 +180,11 @@ app-apply-modal {
       }
     }
   }
-  novo-modal > footer, novo-notification > footer {
+
+  novo-modal>footer,
+  novo-notification>footer {
     flex-flow: column-reverse !important;
+
     button {
       width: 90%;
       margin: 0px 0 25px 0 !important;
@@ -172,4 +192,29 @@ app-apply-modal {
   }
 }
 
+/* Fallback centering for sporadic cases where the modal appears too low */
+.cdk-overlay-pane app-apply-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
 
+.cdk-overlay-pane app-apply-modal novo-modal {
+  max-height: calc(100vh - 60px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px),
+(max-height: 700px) {
+  .cdk-overlay-pane app-apply-modal {
+    justify-content: flex-start;
+    /* keep existing mobile behavior */
+  }
+
+  .cdk-overlay-pane app-apply-modal novo-modal {
+    max-height: none;
+  }
+}
